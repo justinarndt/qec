@@ -105,20 +105,29 @@ class UnionFindCompiledDecoder(sinter.CompiledDecoder):
     ) -> np.ndarray:
         """Decode multiple shots from bit-packed syndrome data."""
         num_shots = bit_packed_detection_event_data.shape[0]
+        num_obs = self.dem.num_observables
+        num_obs_bytes = (num_obs + 7) // 8
+
         shots = np.unpackbits(
             bit_packed_detection_event_data,
             axis=1,
             count=self.dem.num_detectors,
             bitorder="little",
         )
-        num_obs = self.dem.num_observables
-        predictions = np.zeros((num_shots, num_obs), dtype=np.uint8)
+
+        # Pre-allocate bit-packed result array
+        result = np.zeros((num_shots, num_obs_bytes), dtype=np.uint8)
 
         for i in range(num_shots):
             syndrome = shots[i]
-            predictions[i] = self.decoder.decode(syndrome)
+            correction = self.decoder.decode(syndrome)
+            packed = np.packbits(
+                np.asarray(correction, dtype=np.uint8).flatten()[:num_obs],
+                bitorder="little",
+            )
+            result[i, : len(packed)] = packed
 
-        return np.packbits(predictions, axis=1, bitorder="little")
+        return np.ascontiguousarray(result)
 
     @property
     def latencies(self) -> list[float]:

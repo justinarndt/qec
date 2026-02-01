@@ -1,9 +1,9 @@
-# Core dependencies - pinned for reproducibility
+# Core dependencies - pinned# Core dependencies
+numpy==2.0.2  # Pin to 2.0.x for sinter compatibility
 stim>=1.12.0
 sinter>=1.12.0
 pymatching>=2.0.0
 ldpc>=2.0.0
 fusion-blossom>=0.2.0
-numpy>=1.24.0
 matplotlib>=3.7.0
 scipy>=1.10.0

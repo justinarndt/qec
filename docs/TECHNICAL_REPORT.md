@@ -150,10 +150,11 @@ python benchmarks/sinter_full_benchmark.py --full
 
 ## Appendix B: Repository
 
-GitHub: [github.com/justinarndt/asr-mp-decoder](https://github.com/justinarndt/asr-mp-decoder)
+GitHub: [github.com/justinarndt/asr-mp-decoder](https://github.com/justinarndt/qec)
 
 ---
 
 *Report generated: February 2026*  
 *ASR-MP Decoder v1.0.0-alpha*
+
 

@@ -79,9 +79,9 @@ class ASRMPDecoder:
             error_rate=error_rate,
             channel_probs=self.priors,
             bp_method=bp_method,
-            max_iter=200,  # High precision for Cloud/Cluster
+            max_iter=50,   # FAST: Standard convergence
             osd_method=osd_method,
-            osd_order=35,   # Deep search for maximum suppression
+            osd_order=10,  # FAST: Reasonable suppression, <100ms per shot
         )
 
     def decode(self, syndrome: np.ndarray) -> np.ndarray:

@@ -34,14 +34,14 @@ def parse_args() -> argparse.Namespace:
         "--distances",
         nargs="+",
         type=int,
-        default=[5, 7, 9],
+        default=[5, 7, 9, 11, 13, 15],
         help="Code distances to benchmark",
     )
     parser.add_argument(
         "-p",
         "--error-rate",
         type=float,
-        default=0.003,
+        default=0.004, # Midpoint of 0.001-0.006
         help="Base physical error rate",
     )
     parser.add_argument(
@@ -60,7 +60,7 @@ def parse_args() -> argparse.Namespace:
         "-s",
         "--shots",
         type=int,
-        default=10000,
+        default=1000,
         help="Maximum shots per task",
     )
     parser.add_argument(

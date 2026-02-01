@@ -41,7 +41,7 @@ def generate_stress_circuit(
         >>> dem = circuit.detector_error_model(decompose_errors=True)
     """
     if rounds is None:
-        rounds = d * 3
+        rounds = 200 # User requested 100-200 rounds
 
     # Generate base circuit without noise
     circuit_raw = stim.Circuit.generated(
@@ -114,7 +114,7 @@ def generate_standard_circuit(
         Stim circuit with standard circuit-level noise
     """
     if rounds is None:
-        rounds = d * 3
+        rounds = 200 # User specified sufficient rounds
 
     return stim.Circuit.generated(
         "surface_code:rotated_memory_z",
@@ -153,7 +153,7 @@ def generate_undeniable_tasks(
         >>> samples = sinter.collect(tasks=tasks, ...)
     """
     if distances is None:
-        distances = [5, 7, 9]
+        distances = [5, 7, 9, 11, 13, 15]
 
     tasks = []
     for d in distances:
@@ -194,7 +194,7 @@ def generate_standard_tasks(
         List of sinter.Task objects
     """
     if distances is None:
-        distances = [3, 5, 7]
+        distances = [3, 5, 7, 9, 11, 13, 15]
     if error_rates is None:
         error_rates = [0.001, 0.003, 0.005]
 

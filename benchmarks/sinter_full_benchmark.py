@@ -125,39 +125,45 @@ def parse_args() -> argparse.Namespace:
         help="Run quick validation (1K shots, d=5-9)",
     )
     parser.add_argument(
-        "-d", "--distances",
+        "-d",
+        "--distances",
         nargs="+",
         type=int,
         default=None,
         help="Override distances (default: based on --full/--quick)",
     )
     parser.add_argument(
-        "-p", "--error-rates",
+        "-p",
+        "--error-rates",
         nargs="+",
         type=float,
         default=[0.001, 0.002, 0.003, 0.004, 0.005, 0.006],
         help="Physical error rates",
     )
     parser.add_argument(
-        "-s", "--shots",
+        "-s",
+        "--shots",
         type=int,
         default=None,
         help="Override max shots",
     )
     parser.add_argument(
-        "-e", "--max-errors",
+        "-e",
+        "--max-errors",
         type=int,
         default=1000,
         help="Maximum errors before stopping",
     )
     parser.add_argument(
-        "-w", "--workers",
+        "-w",
+        "--workers",
         type=int,
         default=8,
         help="Number of parallel workers",
     )
     parser.add_argument(
-        "-o", "--output",
+        "-o",
+        "--output",
         type=str,
         default="full_benchmark.csv",
         help="Output CSV file path",
@@ -195,7 +201,9 @@ def main() -> None:
     print("=" * 70)
     print("ASR-MP Full Production Benchmark")
     print("=" * 70)
-    print(f"Mode: {'FULL (CEO-ready)' if args.full else 'QUICK (validation)' if args.quick else 'STANDARD'}")
+    print(
+        f"Mode: {'FULL (CEO-ready)' if args.full else 'QUICK (validation)' if args.quick else 'STANDARD'}"
+    )
     print(f"Distances: {distances}")
     print(f"Error rates: {args.error_rates}")
     print(f"Max shots: {max_shots:,}")
@@ -255,15 +263,27 @@ def main() -> None:
 
     # Summary table
     print("\n" + "-" * 80)
-    print(f"{'Decoder':<12} {'d':<4} {'p':<8} {'Stress':<25} {'Shots':<12} {'Errors':<8} {'P_L':<12}")
+    print(
+        f"{'Decoder':<12} {'d':<4} {'p':<8} {'Stress':<25} {'Shots':<12} {'Errors':<8} {'P_L':<12}"
+    )
     print("-" * 80)
 
-    for s in sorted(samples, key=lambda x: (x.json_metadata["stress"], x.json_metadata["d"], x.json_metadata["p"], x.decoder)):
+    for s in sorted(
+        samples,
+        key=lambda x: (
+            x.json_metadata["stress"],
+            x.json_metadata["d"],
+            x.json_metadata["p"],
+            x.decoder,
+        ),
+    ):
         d = s.json_metadata["d"]
         p = s.json_metadata["p"]
         stress = s.json_metadata.get("stress", "Unknown")[:24]
         p_l = s.errors / s.shots if s.shots > 0 else 0
-        print(f"{s.decoder:<12} {d:<4} {p:<8.4f} {stress:<25} {s.shots:<12,} {s.errors:<8} {p_l:<12.4e}")
+        print(
+            f"{s.decoder:<12} {d:<4} {p:<8.4f} {stress:<25} {s.shots:<12,} {s.errors:<8} {p_l:<12.4e}"
+        )
 
     # Decoder comparison by condition
     print("\n" + "=" * 80)
@@ -273,7 +293,9 @@ def main() -> None:
     conditions = set((s.json_metadata["d"], s.json_metadata["stress"]) for s in samples)
     for d, stress in sorted(conditions):
         print(f"\nd={d}, {stress}:")
-        relevant = [s for s in samples if s.json_metadata["d"] == d and s.json_metadata["stress"] == stress]
+        relevant = [
+            s for s in samples if s.json_metadata["d"] == d and s.json_metadata["stress"] == stress
+        ]
 
         baseline = None
         for s in relevant:

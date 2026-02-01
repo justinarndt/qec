@@ -9,23 +9,21 @@ Usage:
 """
 
 import argparse
-import os
 from pathlib import Path
-from typing import Dict, List, Optional
 
 import matplotlib.pyplot as plt
-import numpy as np
 
 # Try to import sinter for reading CSV
 try:
     import sinter
+
     SINTER_AVAILABLE = True
 except ImportError:
     SINTER_AVAILABLE = False
 
 
 # Plot styling
-plt.style.use('seaborn-v0_8-whitegrid')
+plt.style.use("seaborn-v0_8-whitegrid")
 COLORS = {
     "pymatching": "#666666",
     "union_find": "#1f77b4",
@@ -43,7 +41,7 @@ LABELS = {
 }
 
 
-def load_samples(csv_path: str) -> List:
+def load_samples(csv_path: str) -> list:
     """Load sinter samples from CSV file."""
     if not SINTER_AVAILABLE:
         raise ImportError("sinter is required to load benchmark results")
@@ -51,11 +49,11 @@ def load_samples(csv_path: str) -> List:
 
 
 def plot_pl_vs_distance(
-    samples: List,
+    samples: list,
     output_path: str,
     title: str = "Logical Error Rate vs Code Distance",
-    fixed_p: Optional[float] = None,
-    stress_filter: Optional[str] = None,
+    fixed_p: float | None = None,
+    stress_filter: str | None = None,
 ) -> None:
     """
     Plot P_L vs code distance for each decoder.
@@ -69,7 +67,7 @@ def plot_pl_vs_distance(
     """
     fig, ax = plt.subplots(figsize=(8, 6))
 
-    data: Dict[str, Dict[str, List]] = {}
+    data: dict[str, dict[str, list]] = {}
 
     for s in samples:
         decoder = s.decoder
@@ -92,12 +90,13 @@ def plot_pl_vs_distance(
 
     for decoder in sorted(data.keys()):
         vals = data[decoder]
-        sorted_pairs = sorted(zip(vals["d"], vals["p_l"]))
+        sorted_pairs = sorted(zip(vals["d"], vals["p_l"], strict=False))
         ds = [p[0] for p in sorted_pairs]
         pls = [p[1] for p in sorted_pairs]
 
         ax.plot(
-            ds, pls,
+            ds,
+            pls,
             marker=MARKERS.get(decoder, "o"),
             color=COLORS.get(decoder, "black"),
             label=LABELS.get(decoder, decoder),
@@ -119,7 +118,7 @@ def plot_pl_vs_distance(
 
 
 def plot_drift_resilience(
-    samples: List,
+    samples: list,
     output_path: str,
     fixed_d: int = 5,
 ) -> None:
@@ -133,7 +132,7 @@ def plot_drift_resilience(
     """
     fig, ax = plt.subplots(figsize=(8, 6))
 
-    data: Dict[str, Dict[str, List]] = {}
+    data: dict[str, dict[str, list]] = {}
 
     for s in samples:
         decoder = s.decoder
@@ -152,12 +151,13 @@ def plot_drift_resilience(
 
     for decoder in sorted(data.keys()):
         vals = data[decoder]
-        sorted_pairs = sorted(zip(vals["drift"], vals["p_l"]))
+        sorted_pairs = sorted(zip(vals["drift"], vals["p_l"], strict=False))
         drifts = [p[0] for p in sorted_pairs]
         pls = [p[1] for p in sorted_pairs]
 
         ax.plot(
-            drifts, pls,
+            drifts,
+            pls,
             marker=MARKERS.get(decoder, "o"),
             color=COLORS.get(decoder, "black"),
             label=LABELS.get(decoder, decoder),
@@ -179,7 +179,7 @@ def plot_drift_resilience(
 
 
 def plot_latency_comparison(
-    latency_data: Dict[str, Dict[str, float]],
+    latency_data: dict[str, dict[str, float]],
     output_path: str,
     fpga_target: float = 1.0,
 ) -> None:
@@ -198,10 +198,15 @@ def plot_latency_comparison(
     stds = [latency_data[d].get("std", 0) for d in decoders]
     colors = [COLORS.get(d.lower().replace(" ", "_").replace("+", ""), "#666666") for d in decoders]
 
-    bars = ax.bar(decoders, means, yerr=stds, capsize=5, color=colors, alpha=0.8)
+    _bars = ax.bar(decoders, means, yerr=stds, capsize=5, color=colors, alpha=0.8)
 
-    ax.axhline(y=fpga_target, color="red", linestyle="--", linewidth=2,
-               label=f"FPGA Target ({fpga_target} μs)")
+    ax.axhline(
+        y=fpga_target,
+        color="red",
+        linestyle="--",
+        linewidth=2,
+        label=f"FPGA Target ({fpga_target} μs)",
+    )
 
     ax.set_ylabel("Latency (μs)", fontsize=12)
     ax.set_title("Decoder Latency Comparison", fontsize=14)
@@ -215,7 +220,7 @@ def plot_latency_comparison(
 
 
 def plot_improvement_factor(
-    samples: List,
+    samples: list,
     output_path: str,
     baseline_decoder: str = "pymatching",
 ) -> None:
@@ -230,7 +235,7 @@ def plot_improvement_factor(
     fig, ax = plt.subplots(figsize=(8, 6))
 
     # Group by (d, stress condition)
-    groups: Dict[tuple, Dict[str, float]] = {}
+    groups: dict[tuple, dict[str, float]] = {}
     for s in samples:
         key = (s.json_metadata.get("d"), s.json_metadata.get("stress", "Standard"))
         p_l = s.errors / s.shots if s.shots > 0 else 1
@@ -239,7 +244,7 @@ def plot_improvement_factor(
         groups[key][s.decoder] = p_l
 
     # Calculate improvements
-    improvements: Dict[str, List[tuple]] = {}
+    improvements: dict[str, list[tuple]] = {}
     for key, decoders in groups.items():
         baseline = decoders.get(baseline_decoder, 1)
         for decoder, p_l in decoders.items():
@@ -256,7 +261,8 @@ def plot_improvement_factor(
         imps = [d[1] for d in sorted_data]
 
         ax.plot(
-            ds, imps,
+            ds,
+            imps,
             marker=MARKERS.get(decoder, "o"),
             color=COLORS.get(decoder, "black"),
             label=f"{LABELS.get(decoder, decoder)} vs MWPM",
@@ -279,12 +285,13 @@ def plot_improvement_factor(
 
 def parse_args() -> argparse.Namespace:
     parser = argparse.ArgumentParser(description="Generate publication plots")
-    parser.add_argument("-i", "--input", type=str, required=True,
-                        help="Input CSV file from sinter benchmark")
-    parser.add_argument("-o", "--output", type=str, default="../assets",
-                        help="Output directory for plots")
-    parser.add_argument("--all", action="store_true",
-                        help="Generate all plot types")
+    parser.add_argument(
+        "-i", "--input", type=str, required=True, help="Input CSV file from sinter benchmark"
+    )
+    parser.add_argument(
+        "-o", "--output", type=str, default="../assets", help="Output directory for plots"
+    )
+    parser.add_argument("--all", action="store_true", help="Generate all plot types")
     return parser.parse_args()
 
 

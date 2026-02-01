@@ -5,7 +5,6 @@ Provides noise model generators for benchmarking QEC decoders under
 realistic, hostile conditions including drift, burst errors, and leakage.
 """
 
-from typing import List, Optional
 
 import numpy as np
 import sinter
@@ -17,7 +16,7 @@ def generate_stress_circuit(
     base_p: float,
     drift_strength: float = 0.2,
     burst_prob: float = 0.0,
-    rounds: Optional[int] = None,
+    rounds: int | None = None,
 ) -> stim.Circuit:
     """
     Generate a rotated surface code circuit with stress-test noise.
@@ -101,7 +100,7 @@ def generate_stress_circuit(
 def generate_standard_circuit(
     d: int,
     p: float,
-    rounds: Optional[int] = None,
+    rounds: int | None = None,
 ) -> stim.Circuit:
     """
     Generate a standard rotated surface code circuit with uniform noise.
@@ -129,11 +128,11 @@ def generate_standard_circuit(
 
 
 def generate_undeniable_tasks(
-    distances: Optional[List[int]] = None,
+    distances: list[int] | None = None,
     base_p: float = 0.003,
     drift_strength: float = 0.3,
     burst_prob: float = 0.05,
-) -> List[sinter.Task]:
+) -> list[sinter.Task]:
     """
     Generate sinter tasks for the "undeniable" stress-test benchmark.
 
@@ -181,9 +180,9 @@ def generate_undeniable_tasks(
 
 
 def generate_standard_tasks(
-    distances: Optional[List[int]] = None,
-    error_rates: Optional[List[float]] = None,
-) -> List[sinter.Task]:
+    distances: list[int] | None = None,
+    error_rates: list[float] | None = None,
+) -> list[sinter.Task]:
     """
     Generate sinter tasks for standard (non-stress) benchmarking.
 
@@ -215,9 +214,9 @@ def generate_standard_tasks(
 
 def generate_sweep_tasks(
     d: int,
-    drift_strengths: Optional[List[float]] = None,
+    drift_strengths: list[float] | None = None,
     base_p: float = 0.003,
-) -> List[sinter.Task]:
+) -> list[sinter.Task]:
     """
     Generate tasks for drift amplitude sweep analysis.
 
@@ -257,7 +256,7 @@ def generate_leakage_circuit(
     base_p: float,
     leakage_rate: float = 0.001,
     seepage_rate: float = 0.01,
-    rounds: Optional[int] = None,
+    rounds: int | None = None,
 ) -> stim.Circuit:
     """
     Generate a circuit with heralded leakage noise model.
@@ -315,10 +314,10 @@ def generate_leakage_circuit(
 
 
 def generate_leakage_tasks(
-    distances: Optional[List[int]] = None,
+    distances: list[int] | None = None,
     base_p: float = 0.003,
-    leakage_rates: Optional[List[float]] = None,
-) -> List[sinter.Task]:
+    leakage_rates: list[float] | None = None,
+) -> list[sinter.Task]:
     """
     Generate sinter tasks for leakage resilience analysis.
 

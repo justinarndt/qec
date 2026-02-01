@@ -7,7 +7,6 @@ with Ordered Statistics Decoding (BP+OSD) for rotated surface codes.
 
 import time
 import warnings
-from typing import Optional
 
 import numpy as np
 import sinter
@@ -111,7 +110,8 @@ class ASRMPDecoder:
             Logical correction array (num_observables,)
         """
         estimated_error = self.decode(syndrome)
-        return (self.L @ estimated_error) % 2
+        correction = (self.L @ estimated_error) % 2
+        return np.asarray(correction, dtype=np.uint8).flatten()
 
     def get_average_latency(self) -> float:
         """Get average decode latency in seconds."""

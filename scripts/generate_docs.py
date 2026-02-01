@@ -29,9 +29,12 @@ def main():
 
     # Run pdoc
     cmd = [
-        sys.executable, "-m", "pdoc",
+        sys.executable,
+        "-m",
+        "pdoc",
         "--html",
-        "--output-dir", str(output_path),
+        "--output-dir",
+        str(output_path),
         "--force",
         str(src_path),
     ]

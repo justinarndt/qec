@@ -19,7 +19,7 @@ sys.path.insert(0, os.path.join(os.path.dirname(__file__), "..", "src"))
 import sinter
 
 from asr_mp.decoder import TesseractBPOSD
-from asr_mp.noise_models import generate_undeniable_tasks, generate_sweep_tasks
+from asr_mp.noise_models import generate_sweep_tasks, generate_undeniable_tasks
 from asr_mp.union_find_decoder import UnionFindSinterDecoder
 
 
@@ -30,14 +30,16 @@ def parse_args() -> argparse.Namespace:
         formatter_class=argparse.ArgumentDefaultsHelpFormatter,
     )
     parser.add_argument(
-        "-d", "--distances",
+        "-d",
+        "--distances",
         nargs="+",
         type=int,
         default=[5, 7, 9],
         help="Code distances to benchmark",
     )
     parser.add_argument(
-        "-p", "--error-rate",
+        "-p",
+        "--error-rate",
         type=float,
         default=0.003,
         help="Base physical error rate",
@@ -55,25 +57,29 @@ def parse_args() -> argparse.Namespace:
         help="Burst probability",
     )
     parser.add_argument(
-        "-s", "--shots",
+        "-s",
+        "--shots",
         type=int,
         default=10000,
         help="Maximum shots per task",
     )
     parser.add_argument(
-        "-e", "--max-errors",
+        "-e",
+        "--max-errors",
         type=int,
         default=100,
         help="Maximum errors before stopping",
     )
     parser.add_argument(
-        "-w", "--workers",
+        "-w",
+        "--workers",
         type=int,
         default=4,
         help="Number of parallel workers",
     )
     parser.add_argument(
-        "-o", "--output",
+        "-o",
+        "--output",
         type=str,
         default="stress_benchmark.csv",
         help="Output CSV file path",

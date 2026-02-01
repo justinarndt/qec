@@ -14,6 +14,7 @@
 # %%
 import sys
 import os
+
 sys.path.insert(0, os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", "src"))
 
 import numpy as np
@@ -65,6 +66,7 @@ drift_samples = sinter.collect(
 #
 # Compare per-shot decode times between decoders.
 
+
 # %%
 def profile_latency(dem, num_shots=100):
     """Profile decoder latency on random syndromes."""
@@ -94,6 +96,7 @@ def profile_latency(dem, num_shots=100):
     }
 
     return results
+
 
 # Profile at d=5
 circuit = generate_stress_circuit(d=5, base_p=0.003)
@@ -133,12 +136,15 @@ for decoder, vals in sorted(data_by_decoder.items()):
     sorted_pairs = sorted(zip(vals["drift"], vals["p_l"]))
     drifts = [p[0] * 100 for p in sorted_pairs]  # Convert to %
     pls = [p[1] for p in sorted_pairs]
-    ax1.plot(drifts, pls,
-             marker="o",
-             color=colors.get(decoder, "black"),
-             label=labels.get(decoder, decoder),
-             linewidth=2,
-             markersize=8)
+    ax1.plot(
+        drifts,
+        pls,
+        marker="o",
+        color=colors.get(decoder, "black"),
+        label=labels.get(decoder, decoder),
+        linewidth=2,
+        markersize=8,
+    )
 
 ax1.set_xlabel("Drift Amplitude (%)")
 ax1.set_ylabel("Logical Error Rate ($P_L$)")
@@ -153,8 +159,7 @@ decoders = list(latency_results.keys())
 means = [latency_results[d]["mean"] for d in decoders]
 stds = [latency_results[d]["std"] for d in decoders]
 
-bars = ax2.bar(decoders, means, yerr=stds, capsize=5,
-               color=["orange", "blue"], alpha=0.7)
+bars = ax2.bar(decoders, means, yerr=stds, capsize=5, color=["orange", "blue"], alpha=0.7)
 ax2.axhline(y=1.0, color="red", linestyle="--", linewidth=2, label="FPGA Target (1 μs)")
 ax2.set_ylabel("Latency (μs)")
 ax2.set_title("Decode Latency (d=5)")
@@ -184,10 +189,24 @@ if baseline:
     uf_improve = [baseline / p if p > 0 else 1 for p in improvements["Union-Find"]]
     bp_improve = [baseline / p if p > 0 else 1 for p in improvements["BP+OSD"]]
 
-    ax3.plot(improvements["drifts"], uf_improve, "s-", color="blue",
-             label="Union-Find vs MWPM", linewidth=2, markersize=8)
-    ax3.plot(improvements["drifts"], bp_improve, "^-", color="orange",
-             label="BP+OSD vs MWPM", linewidth=2, markersize=8)
+    ax3.plot(
+        improvements["drifts"],
+        uf_improve,
+        "s-",
+        color="blue",
+        label="Union-Find vs MWPM",
+        linewidth=2,
+        markersize=8,
+    )
+    ax3.plot(
+        improvements["drifts"],
+        bp_improve,
+        "^-",
+        color="orange",
+        label="BP+OSD vs MWPM",
+        linewidth=2,
+        markersize=8,
+    )
     ax3.axhline(y=1.0, color="gray", linestyle="--", alpha=0.5)
     ax3.set_xlabel("Drift Amplitude (%)")
     ax3.set_ylabel("Improvement Factor (vs MWPM)")

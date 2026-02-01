@@ -16,13 +16,13 @@ __author__ = "Justin Arndt"
 __email__ = "justin@example.com"
 
 from .decoder import ASRMPDecoder, TesseractBPOSD
+from .dem_utils import dem_to_matrices
 from .noise_models import (
-    generate_stress_circuit,
-    generate_undeniable_tasks,
     generate_leakage_circuit,
     generate_leakage_tasks,
+    generate_stress_circuit,
+    generate_undeniable_tasks,
 )
-from .dem_utils import dem_to_matrices
 from .union_find_decoder import UnionFindDecoder
 
 __all__ = [

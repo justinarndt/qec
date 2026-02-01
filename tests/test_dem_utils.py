@@ -3,10 +3,7 @@ Unit tests for DEM utilities.
 """
 
 import numpy as np
-import pytest
 import scipy.sparse
-import stim
-
 from conftest import requires_asr_mp
 
 

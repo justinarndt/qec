@@ -98,6 +98,7 @@ stress_samples = sinter.collect(
 # %% [markdown]
 # ## 4. Analyze Results
 
+
 # %%
 def analyze_samples(samples, title):
     """Print analysis of decoder results."""
@@ -111,11 +112,13 @@ def analyze_samples(samples, title):
         p_l = s.errors / s.shots if s.shots > 0 else 0
         print(f"{s.decoder:<15} {d:<5} {s.shots:<10} {s.errors:<10} {p_l:<15.6e}")
 
+
 analyze_samples(standard_samples, "Standard Noise Results")
 analyze_samples(stress_samples, "Stress Test Results (Drift+Burst)")
 
 # %% [markdown]
 # ## 5. Visualization
+
 
 # %%
 def plot_comparison(samples, title, ax):
@@ -139,12 +142,15 @@ def plot_comparison(samples, title, ax):
         sorted_pairs = sorted(zip(vals["d"], vals["p_l"]))
         ds = [p[0] for p in sorted_pairs]
         pls = [p[1] for p in sorted_pairs]
-        ax.plot(ds, pls,
-                marker=markers.get(decoder, "o"),
-                color=colors.get(decoder, "black"),
-                label=labels.get(decoder, decoder),
-                linewidth=2,
-                markersize=8)
+        ax.plot(
+            ds,
+            pls,
+            marker=markers.get(decoder, "o"),
+            color=colors.get(decoder, "black"),
+            label=labels.get(decoder, decoder),
+            linewidth=2,
+            markersize=8,
+        )
 
     ax.set_xlabel("Code Distance (d)")
     ax.set_ylabel("Logical Error Rate ($P_L$)")
@@ -152,6 +158,7 @@ def plot_comparison(samples, title, ax):
     ax.set_yscale("log")
     ax.legend()
     ax.grid(True, alpha=0.3)
+
 
 # Create comparison plot
 fig, (ax1, ax2) = plt.subplots(1, 2, figsize=(14, 5))

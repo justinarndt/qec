@@ -6,7 +6,6 @@ Local Clustering Decoder (LCD). Uses the fusion-blossom library.
 """
 
 import time
-from typing import Optional
 
 import numpy as np
 import sinter
@@ -16,6 +15,7 @@ import stim
 FUSION_BLOSSOM_AVAILABLE = False
 try:
     import fusion_blossom as fb
+
     FUSION_BLOSSOM_AVAILABLE = True
 except ImportError:
     fb = None

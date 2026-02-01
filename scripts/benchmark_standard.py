@@ -30,39 +30,45 @@ def parse_args() -> argparse.Namespace:
         formatter_class=argparse.ArgumentDefaultsHelpFormatter,
     )
     parser.add_argument(
-        "-d", "--distances",
+        "-d",
+        "--distances",
         nargs="+",
         type=int,
         default=[3, 5, 7],
         help="Code distances to benchmark",
     )
     parser.add_argument(
-        "-p", "--error-rates",
+        "-p",
+        "--error-rates",
         nargs="+",
         type=float,
         default=[0.001, 0.003, 0.005],
         help="Physical error rates",
     )
     parser.add_argument(
-        "-s", "--shots",
+        "-s",
+        "--shots",
         type=int,
         default=10000,
         help="Maximum shots per task",
     )
     parser.add_argument(
-        "-e", "--max-errors",
+        "-e",
+        "--max-errors",
         type=int,
         default=100,
         help="Maximum errors before stopping",
     )
     parser.add_argument(
-        "-w", "--workers",
+        "-w",
+        "--workers",
         type=int,
         default=4,
         help="Number of parallel workers",
     )
     parser.add_argument(
-        "-o", "--output",
+        "-o",
+        "--output",
         type=str,
         default="standard_benchmark.csv",
         help="Output CSV file path",

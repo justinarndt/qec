@@ -5,7 +5,6 @@ Provides utilities for converting Stim's DetectorErrorModel into sparse
 matrices suitable for belief propagation decoding.
 """
 
-from typing import Tuple
 
 import numpy as np
 import scipy.sparse
@@ -14,7 +13,7 @@ import stim
 
 def dem_to_matrices(
     dem: stim.DetectorErrorModel,
-) -> Tuple[scipy.sparse.csc_matrix, scipy.sparse.csc_matrix, np.ndarray]:
+) -> tuple[scipy.sparse.csc_matrix, scipy.sparse.csc_matrix, np.ndarray]:
     """
     Convert a DetectorErrorModel to parity check and logical matrices.
 

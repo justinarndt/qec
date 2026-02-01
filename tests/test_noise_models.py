@@ -2,10 +2,7 @@
 Unit tests for noise model generators.
 """
 
-import numpy as np
-import pytest
 import stim
-
 from conftest import requires_asr_mp
 
 
@@ -55,7 +52,7 @@ class TestGenerateStressCircuit:
         """Test burst_prob parameter."""
         from asr_mp.noise_models import generate_stress_circuit
 
-        circuit_no_burst = generate_stress_circuit(d=3, base_p=0.001, burst_prob=0.0)
+        _circuit_no_burst = generate_stress_circuit(d=3, base_p=0.001, burst_prob=0.0)
         circuit_with_burst = generate_stress_circuit(d=3, base_p=0.001, burst_prob=0.1)
 
         # With burst, circuit should have CORRELATED_ERROR

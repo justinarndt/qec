@@ -3,9 +3,6 @@ Unit tests for the ASR-MP decoder.
 """
 
 import numpy as np
-import pytest
-import stim
-
 from conftest import requires_asr_mp
 
 
@@ -135,9 +132,7 @@ class TestTesseractBPOSD:
         num_det_bytes = (small_dem.num_detectors + 7) // 8
         bit_packed = np.zeros((1, num_det_bytes), dtype=np.uint8)
 
-        result = compiled.decode_shots_bit_packed(
-            bit_packed_detection_event_data=bit_packed
-        )
+        result = compiled.decode_shots_bit_packed(bit_packed_detection_event_data=bit_packed)
 
         num_obs_bytes = (small_dem.num_observables + 7) // 8
         assert result.shape == (1, num_obs_bytes)
@@ -153,9 +148,7 @@ class TestTesseractBPOSD:
         num_det_bytes = (small_dem.num_detectors + 7) // 8
         bit_packed = np.zeros((num_shots, num_det_bytes), dtype=np.uint8)
 
-        result = compiled.decode_shots_bit_packed(
-            bit_packed_detection_event_data=bit_packed
-        )
+        result = compiled.decode_shots_bit_packed(bit_packed_detection_event_data=bit_packed)
 
         num_obs_bytes = (small_dem.num_observables + 7) // 8
         assert result.shape == (num_shots, num_obs_bytes)

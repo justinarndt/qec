@@ -6,9 +6,6 @@ to ensure all components work together correctly.
 """
 
 import numpy as np
-import pytest
-import stim
-
 from conftest import requires_asr_mp, requires_union_find
 
 
@@ -22,9 +19,7 @@ class TestEndToEndDecoding:
 
         # Sample some shots
         sampler = small_circuit.compile_detector_sampler()
-        detection_events, observable_flips = sampler.sample(
-            shots=10, separate_observables=True
-        )
+        detection_events, observable_flips = sampler.sample(shots=10, separate_observables=True)
 
         # Decode each shot
         decoder = ASRMPDecoder(small_dem, osd_order=0)
@@ -42,9 +37,7 @@ class TestEndToEndDecoding:
 
         # Sample shots
         sampler = small_circuit.compile_detector_sampler()
-        detection_events, observable_flips = sampler.sample(
-            shots=100, separate_observables=True
-        )
+        detection_events, observable_flips = sampler.sample(shots=100, separate_observables=True)
 
         decoder = ASRMPDecoder(small_dem, osd_order=0)
 
@@ -94,6 +87,7 @@ class TestSinterIntegration:
     def test_tesseract_in_sinter_collect(self, small_circuit, small_dem):
         """Test TesseractBPOSD works with sinter collect."""
         import sinter
+
         from asr_mp.decoder import TesseractBPOSD
 
         task = sinter.Task(
@@ -139,6 +133,7 @@ class TestUnionFindIntegration:
     def test_union_find_in_sinter(self, small_circuit, small_dem):
         """Test UnionFindSinterDecoder works with sinter."""
         import sinter
+
         from asr_mp.union_find_decoder import UnionFindSinterDecoder
 
         task = sinter.Task(
@@ -168,6 +163,7 @@ class TestMultiDecoderComparison:
     def test_all_decoders_together(self, small_circuit, small_dem):
         """Test running all decoders together in sinter."""
         import sinter
+
         from asr_mp.decoder import TesseractBPOSD
         from asr_mp.union_find_decoder import UnionFindSinterDecoder
 

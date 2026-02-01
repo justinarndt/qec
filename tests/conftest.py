@@ -2,35 +2,32 @@
 Pytest configuration and fixtures for ASR-MP tests.
 """
 
-import pytest
 import numpy as np
+import pytest
 import stim
 
 # Optional imports - tests will skip if not available
 try:
-    from asr_mp.decoder import ASRMPDecoder, TesseractBPOSD
-    from asr_mp.dem_utils import dem_to_matrices
-    from asr_mp.noise_models import generate_stress_circuit, generate_standard_circuit
+    from asr_mp.decoder import ASRMPDecoder
+    from asr_mp.noise_models import generate_stress_circuit
+
     ASR_MP_AVAILABLE = True
 except ImportError:
     ASR_MP_AVAILABLE = False
 
 try:
     from asr_mp.union_find_decoder import UnionFindDecoder
+
     UNION_FIND_AVAILABLE = True
 except ImportError:
     UNION_FIND_AVAILABLE = False
 
 
 # Skip markers
-requires_asr_mp = pytest.mark.skipif(
-    not ASR_MP_AVAILABLE,
-    reason="asr_mp package not available"
-)
+requires_asr_mp = pytest.mark.skipif(not ASR_MP_AVAILABLE, reason="asr_mp package not available")
 
 requires_union_find = pytest.mark.skipif(
-    not UNION_FIND_AVAILABLE,
-    reason="fusion-blossom not available"
+    not UNION_FIND_AVAILABLE, reason="fusion-blossom not available"
 )
 
 

@@ -92,7 +92,7 @@ Achievable via:
 
 ## 4. Integration Architecture
 
-![Architecture Diagram](assets/architecture_diagram.svg)
+![Architecture Diagram](/assets/architecture_diagram.svg)
 
 ### 4.1 Hybrid Decoding Strategy
 
@@ -156,3 +156,4 @@ GitHub: [github.com/justinarndt/asr-mp-decoder](https://github.com/justinarndt/a
 
 *Report generated: February 2026*  
 *ASR-MP Decoder v1.0.0-alpha*
+

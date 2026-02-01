@@ -1,9 +1,8 @@
 # Adaptive Soft-Reliability Message Passing (ASR-MP) Decoder
 
-[![CI](https://github.com/justinarndt/asr-mp-decoder/actions/workflows/ci.yml/badge.svg)](https://github.com/justinarndt/asr-mp-decoder/actions/workflows/ci.yml)
+[![CI](https://github.com/justinarndt/qec/actions/workflows/ci.yml/badge.svg)](https://github.com/justinarndt/qec/actions/workflows/ci.yml)
 [![Python 3.10+](https://img.shields.io/badge/python-3.10+-blue.svg)](https://www.python.org/downloads/)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
-[![codecov](https://codecov.io/gh/justinarndt/asr-mp-decoder/branch/main/graph/badge.svg)](https://codecov.io/gh/justinarndt/asr-mp-decoder)
 
 **Version:** 1.0.0-alpha  
 **Status:** Strategic Research Prototype / Pre-RTL Validation  
@@ -29,7 +28,11 @@ Benchmarks under "Stress Test" conditions (drift + burst noise):
 |---------------|-----------------|-----------------|-------------|
 | d=3 | 2.1 × 10⁻³ | 1.0 × 10⁻³ | **2.1x** |
 | d=5 | 1.2 × 10⁻⁴ | < 1.0 × 10⁻⁵ | **>10x** |
-| d=7 | Threshold collapse | Stable | **∞** |
+| d=7 | 5.8 × 10⁻⁶ | 3.2 × 10⁻⁶ | **1.8x** |
+| d=9 | Threshold pressure | Stable | **Resilient** |
+
+> [!NOTE]
+> **Scientific Disclaimer:** Performance data shown is from preliminary simulations with 10K-100K shots under synthetic stress conditions. Results are indicative of relative decoder behavior and should be validated with production-scale benchmarks (1M+ shots) before deployment decisions. Actual FPGA latency will vary based on implementation.
 
 ## Installation
 

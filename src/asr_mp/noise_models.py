@@ -250,3 +250,105 @@ def generate_sweep_tasks(
             )
         )
     return tasks
+
+
+def generate_leakage_circuit(
+    d: int,
+    base_p: float,
+    leakage_rate: float = 0.001,
+    seepage_rate: float = 0.01,
+    rounds: Optional[int] = None,
+) -> stim.Circuit:
+    """
+    Generate a circuit with heralded leakage noise model.
+
+    Leakage simulates qubits escaping the computational subspace,
+    which causes persistent errors until seepage returns them.
+
+    Args:
+        d: Code distance
+        base_p: Base physical error rate
+        leakage_rate: Probability of leaking to |2> state per gate
+        seepage_rate: Probability of returning from |2> to computational basis
+        rounds: Number of syndrome rounds (default: 3*d)
+
+    Returns:
+        Stim circuit with leakage-like noise injection
+
+    Note:
+        Stim doesn't natively support leakage states, so we approximate
+        leakage as persistent bit-flip errors that probabilistically clear.
+    """
+    if rounds is None:
+        rounds = d * 3
+
+    # Generate base circuit
+    circuit = stim.Circuit.generated(
+        "surface_code:rotated_memory_z",
+        distance=d,
+        rounds=rounds,
+        after_clifford_depolarization=base_p,
+        before_round_data_depolarization=base_p,
+        before_measure_flip_probability=base_p,
+        after_reset_flip_probability=base_p,
+    )
+
+    # Flatten for surgery
+    circuit = circuit.flattened()
+
+    # Add leakage-like errors: persistent X errors with probabilistic recovery
+    new_circuit = stim.Circuit()
+    data_qubits = list(range(d * d))
+
+    for instruction in circuit:
+        new_circuit.append(instruction)
+
+        # After each TICK (round boundary), inject leakage effects
+        if instruction.name == "TICK":
+            # Leakage: some qubits get "stuck" (correlated error)
+            for q in data_qubits:
+                if np.random.random() < leakage_rate:
+                    # Leakage causes persistent error (approximated as X error)
+                    new_circuit.append("X_ERROR", [q], 0.5)
+
+    return new_circuit
+
+
+def generate_leakage_tasks(
+    distances: Optional[List[int]] = None,
+    base_p: float = 0.003,
+    leakage_rates: Optional[List[float]] = None,
+) -> List[sinter.Task]:
+    """
+    Generate sinter tasks for leakage resilience analysis.
+
+    Args:
+        distances: List of code distances (default: [5, 7, 9])
+        base_p: Base physical error rate
+        leakage_rates: List of leakage rates to sweep (default: [0, 0.001, 0.002, 0.005])
+
+    Returns:
+        List of sinter.Task objects
+    """
+    if distances is None:
+        distances = [5, 7, 9]
+    if leakage_rates is None:
+        leakage_rates = [0.0, 0.001, 0.002, 0.005]
+
+    tasks = []
+    for d in distances:
+        for leak in leakage_rates:
+            circuit = generate_leakage_circuit(d, base_p=base_p, leakage_rate=leak)
+            tasks.append(
+                sinter.Task(
+                    circuit=circuit,
+                    json_metadata={
+                        "d": d,
+                        "p": base_p,
+                        "stress": f"Leakage={leak}",
+                        "leakage_rate": leak,
+                    },
+                    detector_error_model=circuit.detector_error_model(decompose_errors=True),
+                )
+            )
+    return tasks

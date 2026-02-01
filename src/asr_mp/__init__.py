@@ -16,7 +16,12 @@ __author__ = "Justin Arndt"
 __email__ = "justin@example.com"
 
 from .decoder import ASRMPDecoder, TesseractBPOSD
-from .noise_models import generate_stress_circuit, generate_undeniable_tasks
+from .noise_models import (
+    generate_stress_circuit,
+    generate_undeniable_tasks,
+    generate_leakage_circuit,
+    generate_leakage_tasks,
+)
 from .dem_utils import dem_to_matrices
 from .union_find_decoder import UnionFindDecoder
 
@@ -26,6 +31,8 @@ __all__ = [
     "UnionFindDecoder",
     "generate_stress_circuit",
     "generate_undeniable_tasks",
+    "generate_leakage_circuit",
+    "generate_leakage_tasks",
     "dem_to_matrices",
     "__version__",
 ]

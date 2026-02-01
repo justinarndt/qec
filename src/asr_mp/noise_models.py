@@ -41,7 +41,7 @@ def generate_stress_circuit(
         >>> dem = circuit.detector_error_model(decompose_errors=True)
     """
     if rounds is None:
-        rounds = 200 # User requested 100-200 rounds
+        rounds = d * 3  # Revert to standard depth (200 rounds is too heavy for Block OSD)
 
     # Generate base circuit without noise
     circuit_raw = stim.Circuit.generated(
@@ -114,7 +114,7 @@ def generate_standard_circuit(
         Stim circuit with standard circuit-level noise
     """
     if rounds is None:
-        rounds = 200 # User specified sufficient rounds
+        rounds = d * 3
 
     return stim.Circuit.generated(
         "surface_code:rotated_memory_z",

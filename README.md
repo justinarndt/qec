@@ -78,8 +78,8 @@ riverlane-asr-mp/
 
 ```bash
 # Clone the repository
-git clone https://github.com/riverlane-internal/asr-mp-decoder.git
-cd asr-mp-decoder
+git clone https://github.com/justinarndt/qec.git
+cd qec
 
 # Install dependencies
 pip install -r requirements.txt

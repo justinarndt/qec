@@ -65,7 +65,6 @@ def dem_to_matrices(
         shape=(dem.num_detectors, num_errors),
         dtype=np.uint8,
     )
-    H.data = H.data % 2  # Ensure binary
 
     # Build L matrix
     L = scipy.sparse.csc_matrix(
@@ -73,7 +72,6 @@ def dem_to_matrices(
         shape=(dem.num_observables, num_errors),
         dtype=np.uint8,
     )
-    L.data = L.data % 2  # Ensure binary
 
     return H, L, np.array(priors)
 

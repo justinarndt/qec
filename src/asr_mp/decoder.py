@@ -171,7 +171,8 @@ class TesseractCompiledDecoder(sinter.CompiledDecoder):
 
         for i in range(num_shots):
             syndrome = shots[i]
-            predictions[i] = self.decoder.get_logical_correction(syndrome)
+            correction = self.decoder.get_logical_correction(syndrome)
+            predictions[i] = np.asarray(correction, dtype=np.uint8).flatten()[:num_obs]
 
         return np.packbits(predictions, axis=1, bitorder="little")
 

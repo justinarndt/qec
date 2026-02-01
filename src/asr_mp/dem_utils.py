@@ -67,11 +67,13 @@ def dem_to_matrices(
         dtype=np.uint8,
     )
 
+    # Build L matrix and apply mod 2 to handle overlapping entries
     L = scipy.sparse.csc_matrix(
         (np.ones(len(row_inds_L), dtype=np.uint8), (row_inds_L, col_inds_L)),
         shape=(dem.num_observables, num_errors),
         dtype=np.uint8,
     )
+    L.data = L.data % 2  # Ensure binary
 
     return H, L, np.array(priors)
 

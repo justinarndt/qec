@@ -65,6 +65,7 @@ def dem_to_matrices(
         shape=(dem.num_detectors, num_errors),
         dtype=np.uint8,
     )
+    H.data = H.data % 2  # Ensure binary
 
     # Build L matrix and apply mod 2 to handle overlapping entries
     L = scipy.sparse.csc_matrix(

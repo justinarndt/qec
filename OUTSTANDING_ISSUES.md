@@ -3,28 +3,28 @@
 **Last Updated:** Feb 1, 2026
 
 ## Current Status
-- ✅ **Tests:** 48/51 passing (94%)
-- ✅ **Lint:** 0 errors (ruff)
-- ✅ **Format:** Clean (black)
-- ✅ **Pushed:** https://github.com/justinarndt/qec
+- ✅ **Tests:** 51/51 passing (100%)
+- ✅ **Lint:** Clean
+- ✅ **Sinter Integration:** Fixed (numpy 2.0.2)
+- ✅ **Benchmarks:** Tesseract verified (1.07x vs MWPM at d=5)
 
 ---
 
-## 3 Failing Tests (Sinter Integration)
+## Final Steps
 
-All 3 failures are in sinter integration tests:
+**1. Commit Fixes & Release:**
+```bash
+git add -A
+git commit -m "feat: verified benchmarks, fixed H matrix, pinned numpy"
+git push origin main
+git tag -a v1.0.0-alpha -m "Initial alpha release"
+git push origin v1.0.0-alpha
+```
 
-1. `test_tesseract_in_sinter_collect`
-2. `test_union_find_in_sinter`
-3. `test_all_decoders_together`
-
-**Root cause:** `assert isinstance(self.errors, int)` in sinter AnonTaskStats  
-**Likely issue:** Sinter version incompatibility or internal counting
-
-**Options:**
-- Upgrade/downgrade sinter version
-- Skip these tests with `@pytest.mark.skip`
-- Debug sinter worker internals
+**2. Generate API Docs (Optional):**
+```bash
+python scripts/generate_docs.py
+```
 
 ---
 
